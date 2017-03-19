@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">EarthPorn</string>
+    <string name="button_new">new</string>
+    <string name="button_top">top</string>
 </resources>
