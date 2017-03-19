@@ -6,18 +6,39 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String URL_NEW_IMAGES = "https://www.reddit.com/r/EarthPorn/new/.json?limit=100";
+    private static final String URL_TOP_IMAGES = "https://www.reddit.com/r/EarthPorn/top/.json?limit=100";
     MyRecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ImagesAsyncTask task = new ImagesAsyncTask(this);
-        task.execute("https://www.reddit.com/r/EarthPorn/top/.json?limit=100");
+
+
+        Button newButton = (Button) findViewById(R.id.new_button);
+        newButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagesAsyncTask task = new ImagesAsyncTask(MainActivity.this);
+                task.execute(URL_NEW_IMAGES);
+            }
+        });
+
+        Button topButton = (Button) findViewById(R.id.top_button);
+        topButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagesAsyncTask task = new ImagesAsyncTask(MainActivity.this);
+                task.execute(URL_TOP_IMAGES);
+            }
+        });
     }
 
     private class ImagesAsyncTask extends AsyncTask<String, Void, List<String>> {
