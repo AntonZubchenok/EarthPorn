@@ -42,7 +42,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         }
 
         public void bindData(String imageUrl) {
-            this.mImageView.setImageResource(R.mipmap.ic_launcher);
+            this.mImageView.setImageResource(R.drawable.image);
         }
     }
 }
