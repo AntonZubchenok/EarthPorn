@@ -1,10 +1,13 @@
 package by.zubchenok.earthporn;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -35,14 +38,16 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         private ImageView mImageView;
+        private Context mContext;
 
         public MyViewHolder(View view) {
             super(view);
             mImageView = (ImageView) view.findViewById(R.id.image_view);
+            mContext = view.getContext();
         }
 
         public void bindData(String imageUrl) {
-            this.mImageView.setImageResource(R.drawable.image);
+            Glide.with(mContext).load(imageUrl).into(mImageView);
         }
     }
 }
