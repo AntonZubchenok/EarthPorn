@@ -18,9 +18,16 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+/* The class contains helper methods to work with HTTP and JSON.
+* */
 public final class QueryUtils {
     public static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
+    /* The method makes http connection, handles the response and returns List of image URLs.
+    *
+    * @param requestUrl the URL to make request
+    * @return the List that contains URLs of images to display
+    * */
     public static List<String> fetchImageUrls(String requestUrl) {
         URL url = createUrl(requestUrl);
 
@@ -35,6 +42,11 @@ public final class QueryUtils {
         return imageUrls;
     }
 
+    /* The method makes URL from String.
+    *
+    * @param urlString the String URL
+    * @return the URL object
+    * */
     private static URL createUrl(String urlString) {
         URL url = null;
         try {
@@ -45,6 +57,12 @@ public final class QueryUtils {
         return url;
     }
 
+    /* The method makes http connection and gets the JSON response.
+    *
+    * @param URL the URL to connect
+    * @return the String JSON response
+    * @throws IOExceptions if problems with connection were occurred
+    * */
     private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
 
@@ -83,6 +101,12 @@ public final class QueryUtils {
         return jsonResponse;
     }
 
+    /* The method reads information from InputStream.
+    *
+    * @param inputStream InputStream to read from
+    * @return the String have been read
+    * @throws IOExceptions if problems with InputStream reading were occurred
+    * */
     private static final String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
 
@@ -98,6 +122,11 @@ public final class QueryUtils {
         return output.toString();
     }
 
+    /* The method parses JSON to List of Strings with image URLs.
+    *
+    * @param jsonString JSON String to parse
+    * @return the List of Strings with image URLs
+    * */
     private static List<String> extractFeaturesFromJson(String jsonString) {
 
         // If the JSON string is empty or null, then return early.

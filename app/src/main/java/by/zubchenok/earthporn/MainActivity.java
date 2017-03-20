@@ -1,6 +1,5 @@
 package by.zubchenok.earthporn;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,19 +13,37 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private static final String URL_NEW_IMAGES = "https://www.reddit.com/r/EarthPorn/new/.json?limit=100";
     private static final String URL_TOP_IMAGES = "https://www.reddit.com/r/EarthPorn/top/.json?limit=100";
+    RecyclerView mRecyclerView;
     MyRecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRecyclerView();
+        setButtons();
+    }
 
+    private void setRecyclerView() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mAdapter = new MyRecyclerViewAdapter();
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return (position % 3 == 0 ? 2 : 1);
+            }
+        });
+        mRecyclerView.setLayoutManager(layoutManager);
+    }
 
+    private void setButtons() {
         Button newButton = (Button) findViewById(R.id.new_button);
         newButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagesAsyncTask task = new ImagesAsyncTask(MainActivity.this);
+                ImagesAsyncTask task = new ImagesAsyncTask();
                 task.execute(URL_NEW_IMAGES);
             }
         });
@@ -35,18 +52,13 @@ public class MainActivity extends AppCompatActivity {
         topButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagesAsyncTask task = new ImagesAsyncTask(MainActivity.this);
+                ImagesAsyncTask task = new ImagesAsyncTask();
                 task.execute(URL_TOP_IMAGES);
             }
         });
     }
 
     private class ImagesAsyncTask extends AsyncTask<String, Void, List<String>> {
-        private Context mContext;
-
-        public ImagesAsyncTask(Context context) {
-            mContext = context;
-        }
 
         @Override
         protected List<String> doInBackground(String... urls) {
@@ -61,18 +73,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(List<String> data) {
-            mAdapter = new MyRecyclerViewAdapter(data);
-            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-            recyclerView.setHasFixedSize(true);
-            GridLayoutManager layoutManager = new GridLayoutManager(mContext, 2, GridLayoutManager.VERTICAL, false);
-            layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                @Override
-                public int getSpanSize(int position) {
-                    return (position % 3 == 0 ? 2 : 1);
-                }
-            });
-            recyclerView.setLayoutManager(layoutManager);
-            recyclerView.setAdapter(mAdapter);
+            mAdapter.setData(data);
+            mRecyclerView.setAdapter(mAdapter);
         }
     }
 }

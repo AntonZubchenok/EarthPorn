@@ -14,11 +14,6 @@ import java.util.List;
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.MyViewHolder> {
     private List<String> imageUrls;
 
-    public MyRecyclerViewAdapter(List<String> imageUrls) {
-        this.imageUrls = imageUrls;
-    }
-
-
     @Override
     public MyRecyclerViewAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_item, parent, false);
@@ -46,8 +41,12 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             mContext = view.getContext();
         }
 
-        public void bindData(String imageUrl) {
+        private void bindData(String imageUrl) {
             Glide.with(mContext).load(imageUrl).into(mImageView);
         }
+    }
+
+    public void setData(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 }
